@@ -1,25 +1,49 @@
-
 easyzone
 ========
 
-* A high-level abstraction on top of pythondns.
+Overview
+--------
+
+* A high-level abstraction on top of dnspython.
 * Load a zone file into objects.
 * Modify/add/delete zone/record objects.
 * Save back to zone file.
 * Auto-update serial (if necessary).
 
-class Zone:
-  domain (eg: "example.com.")
-  
-  root
-  root.soa
-  root.records (list)
-  
-  hosts (dict of hostname:record_list)
+
+Requirements
+------------
+
+  * dnspython - http://www.dnspython.org/
 
 
-Eg:
->>> z = easydns.zone_from_file('/var/namedb/example.com')
+Build/Test/Install
+------------------
+
+Build::
+
+  $ python setup.py build
+
+Test::
+
+  $ python setup.py test
+
+Install::
+
+  $ python setup.py install
+
+
+OR with setuptools::
+
+  $ easy_install dnspython
+  $ easy_install easyzone
+
+
+Example
+-------
+
+>>> from easyzone import easyzone
+>>> z = easyzone.zone_from_file('example.com', '/var/namedb/example.com')
 >>> z.domain
 'example.com.'
 >>> z.root.soa.serial

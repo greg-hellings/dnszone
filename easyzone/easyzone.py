@@ -12,7 +12,7 @@ __author__ = 'Chris Miles'
 __copyright__ = '(c) Chris Miles 2007'
 __id__ = '$Id$'
 __url__ = '$URL$'
-__version__ = '1.1.1'
+__version__ = '1.1.2'
 
 
 # ---- Imports ----
@@ -312,6 +312,7 @@ def zone_from_file(domain, filename):
     '''
     zone = Zone(domain)
     zone.load_from_file(filename)
+    return zone
 
 
 def _new_rdata(rectype, *args):

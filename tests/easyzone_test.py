@@ -12,7 +12,7 @@ import tempfile
 import types
 import unittest
 
-from easyzone.easyzone import Name, SOA, Zone, RecordsError, ZoneError
+from easyzone.easyzone import Name, SOA, Zone, RecordsError, ZoneError, zone_from_file
 
 
 
@@ -121,6 +121,25 @@ class ZoneLoadTest(unittest.TestCase):
         records = self.zone.names['example.com.'].records('MX').items
         self.failUnlessEqual(records, [(10, 'mail.example.com.'), (20, 'mail2.example.com.')])
     
+
+class ZoneLoadFunctionTest(unittest.TestCase):
+    '''Another load test to test the module function zone_from_file().
+    '''
+    def setUp(self):
+        zone_file = os.path.join(os.path.dirname(__file__), 'files', 'example.com')
+        self.zone = zone_from_file('example.com', zone_file)
+    
+    def test_type(self):
+        self.failUnlessEqual(type(self.zone), Zone)
+    
+    def test_domain(self):
+        self.failUnlessEqual(self.zone.domain, 'example.com.')
+    
+    def test_root_type(self):
+        root = self.zone.root
+        self.failUnlessEqual(type(root), Name)
+    
+
 
 class ZoneModifyTest(unittest.TestCase):
     def setUp(self):
