@@ -12,7 +12,7 @@ __author__ = 'Chris Miles'
 __copyright__ = '(c) Chris Miles 2007'
 __id__ = '$Id$'
 __url__ = '$URL$'
-__version__ = '1.1.2'
+__version__ = '1.2.0'
 
 
 # ---- Imports ----
@@ -33,6 +33,7 @@ import dns.rdtypes.ANY.CNAME
 import dns.rdtypes.ANY.NS
 import dns.rdtypes.ANY.MX
 import dns.rdtypes.IN.A
+import dns.rdtypes.ANY.TXT
 
 
 # ---- Exceptions ----
@@ -131,6 +132,11 @@ class Records(object):
             assert len(item) == 2
             assert type(item[0]) == types.IntType
             assert type(item[1]) == types.StringType
+        elif self.type == 'TXT':
+            assert type(item) == types.StringType
+            if item.startswith('"') and item.endswith('"'):
+                # strip quotes off both ends; dns module will add them automatically
+                item = item[1:-1]
         else:
             assert type(item) == types.StringType
         
@@ -317,7 +323,7 @@ def zone_from_file(domain, filename):
 
 def _new_rdata(rectype, *args):
     '''Create a new rdata type of `rectype`.
-    rectype must be one of: 'NS', 'MX', 'A', 'CNAME'
+    rectype must be one of: 'NS', 'MX', 'A', 'CNAME', 'TXT'
     Extra arguments are as required by the rectype.
     '''
     if rectype == 'NS':
@@ -334,6 +340,9 @@ def _new_rdata(rectype, *args):
     elif rectype == 'CNAME':
         name = dns.name.Name( args[0].split('.') )
         rd = dns.rdtypes.ANY.CNAME.CNAME(dns.rdataclass.IN, dns.rdatatype.CNAME, name)
+    elif rectype == 'TXT':
+        name = dns.name.Name( args[0].split('.') )
+        rd = dns.rdtypes.ANY.TXT.TXT(dns.rdataclass.IN, dns.rdatatype.TXT, name)
     else:
         raise ValueError("rectype not supported: %s" %rectype)
     
