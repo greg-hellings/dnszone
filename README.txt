@@ -4,6 +4,13 @@ easyzone
 Overview
 --------
 
+Easyzone is a package to manage the common record types of a
+zone file, including SOA records.  This module sits on top of
+the dnspython package and provides a higher level abstraction
+for common zone file manipulation use cases.
+
+Main features:
+
 * A high-level abstraction on top of dnspython.
 * Load a zone file into objects.
 * Modify/add/delete zone/record objects.

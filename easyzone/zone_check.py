@@ -4,20 +4,21 @@
 
 A wrapper around 'named-checkzone' for checking the validity and syntax of zone files.
 
-Example:
->>> from easyzone.zone_check import ZoneCheck
->>> c = ZoneCheck()
->>> c.isValid('example.com', '/var/named/zones/example.com')
-True
->>> c.isValid('foo.com', '/var/named/zones/example.com')
-False
->>> c.error
-'Bad syntax'
->>> 
->>> c = ZoneCheck(checkzone='/usr/sbin/named-checkzone')
->>> c.isValid('example.com', '/var/named/zones/example.com')
-True
->>>
+Example::
+
+    >>> from easyzone.zone_check import ZoneCheck
+    >>> c = ZoneCheck()
+    >>> c.isValid('example.com', '/var/named/zones/example.com')
+    True
+    >>> c.isValid('foo.com', '/var/named/zones/example.com')
+    False
+    >>> c.error
+    'Bad syntax'
+    >>> 
+    >>> c = ZoneCheck(checkzone='/usr/sbin/named-checkzone')
+    >>> c.isValid('example.com', '/var/named/zones/example.com')
+    True
+    >>>
 '''
 
 __author__ = 'Chris Miles'
@@ -43,7 +44,7 @@ class ZoneCheck(object):
     syntax of a zone file.
     
     `checkzone` : string containing path to named-checkzone binary.  Or leave
-            as "named-checkzone" to search with default PATH.
+    as "named-checkzone" to search with default PATH.
     '''
     def __init__(self, checkzone='checkzone'):
         self.checkzone = checkzone
