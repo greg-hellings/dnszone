@@ -5,7 +5,13 @@
 #  Copyright (c) 2007 Chris Miles. All rights reserved.
 #
 
-from distutils.core import setup, Command
+try:
+    from setuptools import setup, Command
+    use_setuptools = True
+except ImportError:
+    from distutils.core import setup, Command
+    use_setuptools = False
+
 from glob import glob
 import os
 import sys
@@ -65,7 +71,7 @@ class CleanCommand(Command):
     
 
 
-setup(
+setup_args = dict(
     name = 'easyzone',
     version = __version__,
     author = 'Chris Miles',
@@ -79,6 +85,23 @@ for common zone file manipulation use cases.
 ''',
     url = 'http://www.python.org/',
     packages = ['easyzone'],
-    cmdclass = { 'test': TestCommand, 'clean': CleanCommand }
+    cmdclass = { 'test': TestCommand, 'clean': CleanCommand },
 )
 
+if use_setuptools:
+    setup_args.update(dict(
+        classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+        keywords='',
+        license='MIT',
+        include_package_data=True,
+        zip_safe=False,
+        install_requires=[
+            # -*- Extra requirements: -*-
+            "dnspython",
+        ],
+        entry_points="""
+        # -*- Entry points: -*-
+        """,
+    ))
+
+setup(**setup_args)
