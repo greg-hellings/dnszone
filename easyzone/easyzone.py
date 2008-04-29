@@ -12,7 +12,7 @@ __author__ = 'Chris Miles'
 __copyright__ = '(c) Chris Miles 2007'
 __id__ = '$Id$'
 __url__ = '$URL$'
-__version__ = '1.2.0'
+__version__ = '1.2.1'
 
 
 # ---- Imports ----
@@ -341,8 +341,7 @@ def _new_rdata(rectype, *args):
         name = dns.name.Name( args[0].split('.') )
         rd = dns.rdtypes.ANY.CNAME.CNAME(dns.rdataclass.IN, dns.rdatatype.CNAME, name)
     elif rectype == 'TXT':
-        name = dns.name.Name( args[0].split('.') )
-        rd = dns.rdtypes.ANY.TXT.TXT(dns.rdataclass.IN, dns.rdatatype.TXT, name)
+        rd = dns.rdtypes.ANY.TXT.TXT(dns.rdataclass.IN, dns.rdatatype.TXT, args[0])
     else:
         raise ValueError("rectype not supported: %s" %rectype)
     

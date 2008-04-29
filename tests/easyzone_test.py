@@ -256,6 +256,24 @@ class ZoneModifyTest(unittest.TestCase):
         self.failUnlessEqual(self.zone.names['foo.example.com.'].records('A'), None)
         self.failUnlessEqual(self.zone.names['foo.example.com.'].records('MX').items, [(10, 'mail.example.com.')])
     
+    def test_names_add_bar_TXT_simple(self):
+        # add simple TXT record to bar.example.com.
+        self.zone.names['bar.example.com.'].records('TXT', create=True).add('"v=spf1 a mx ?all"')
+        records = self.zone.names['bar.example.com.'].records('TXT').items
+        self.failUnlessEqual(records, ['"v=spf1 a mx ?all"'])
+    
+    def test_names_add_bar_TXT_with_periods(self):
+        # add TXT record to bar.example.com. containing periods
+        self.zone.names['bar.example.com.'].records('TXT', create=True).add('"v=spf1 a mx include:mailseat.com include:cluster3.eu.messagelabs.com ?all"')
+        records = self.zone.names['bar.example.com.'].records('TXT').items
+        self.failUnlessEqual(records, ['"v=spf1 a mx include:mailseat.com include:cluster3.eu.messagelabs.com ?all"'])
+    
+    def test_names_add_bar_TXT_no_quotes(self):
+        # add TXT record to bar.example.com. excluding surrounding quotes
+        self.zone.names['bar.example.com.'].records('TXT', create=True).add('v=spf1 a mx include:mailseat.com include:cluster3.eu.messagelabs.com ?all')
+        records = self.zone.names['bar.example.com.'].records('TXT').items
+        self.failUnlessEqual(records, ['"v=spf1 a mx include:mailseat.com include:cluster3.eu.messagelabs.com ?all"'])
+    
 
 
 class ZoneModifySaveTest(unittest.TestCase):
