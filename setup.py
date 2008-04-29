@@ -78,10 +78,52 @@ setup_args = dict(
     author_email = 'miles.chris@gmail.com',
     description = 'Easy Zone - DNS Zone abstraction module',
     long_description = '''\
+easyzone
+========
+
+Overview
+--------
+
 Easyzone is a package to manage the common record types of a
 zone file, including SOA records.  This module sits on top of
 the dnspython package and provides a higher level abstraction
 for common zone file manipulation use cases.
+
+Main features:
+
+* A high-level abstraction on top of dnspython.
+* Load a zone file into objects.
+* Modify/add/delete zone/record objects.
+* Save back to zone file.
+* Auto-update serial (if necessary).
+
+
+Requirements
+------------
+
+  * dnspython - http://www.dnspython.org/
+
+
+Build/Test/Install
+------------------
+
+Build::
+
+  $ python setup.py build
+
+Test::
+
+  $ python setup.py test
+
+Install::
+
+  $ python setup.py install
+
+
+OR with setuptools::
+
+  $ easy_install easyzone
+
 
 Examples
 --------
@@ -145,16 +187,20 @@ ZoneReload::
   >>> r.reload('example.com')
   zone reload up-to-date
   >>>
-
 ''',
-    url = 'http://www.python.org/',
+    # url = 'http://www.python.org/',
     packages = ['easyzone'],
     cmdclass = { 'test': TestCommand, 'clean': CleanCommand },
 )
 
 if use_setuptools:
     setup_args.update(dict(
-        classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+        classifiers=[
+            "Development Status :: 4 - Beta",
+            "License :: OSI Approved :: MIT License",
+            "Topic :: Internet :: Name Service (DNS)",
+            "Topic :: System :: Systems Administration",
+        ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
         keywords='',
         license='MIT',
         include_package_data=True,

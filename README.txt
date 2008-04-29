@@ -42,7 +42,6 @@ Install::
 
 OR with setuptools::
 
-  $ easy_install dnspython
   $ easy_install easyzone
 
 
