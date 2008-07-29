@@ -188,7 +188,7 @@ ZoneReload::
   zone reload up-to-date
   >>>
 ''',
-    # url = 'http://www.python.org/',
+    url = 'http://www.psychofx.com/easyzone/',
     packages = ['easyzone'],
     cmdclass = { 'test': TestCommand, 'clean': CleanCommand },
 )
