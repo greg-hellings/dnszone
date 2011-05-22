@@ -17,6 +17,10 @@ Main features:
 * Save back to zone file.
 * Auto-update serial (if necessary).
 
+http://www.psychofx.com/easyzone/
+http://pypi.python.org/pypi/easyzone
+https://bitbucket.org/chrismiles/easyzone/
+
 
 Requirements
 ------------

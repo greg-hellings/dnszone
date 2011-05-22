@@ -2,7 +2,7 @@
 #  setup.py for easyzone package
 #
 #  Created by Chris Miles on 2007-01-29.
-#  Copyright (c) 2007 Chris Miles. All rights reserved.
+#  Copyright (c) 2007-2011 Chris Miles. All rights reserved.
 #
 
 try:
@@ -88,6 +88,11 @@ Easyzone is a package to manage the common record types of a
 zone file, including SOA records.  This module sits on top of
 the dnspython package and provides a higher level abstraction
 for common zone file manipulation use cases.
+
+http://www.psychofx.com/easyzone/
+http://pypi.python.org/pypi/easyzone
+https://bitbucket.org/chrismiles/easyzone/
+
 
 Main features:
 
