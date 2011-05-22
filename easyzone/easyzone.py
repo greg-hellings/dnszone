@@ -304,7 +304,7 @@ class Zone(object):
         
         if not filename:
             filename = self.filename
-        self._zone.to_file(filename)
+        self._zone.to_file(filename, relativize=False)
     
 
 

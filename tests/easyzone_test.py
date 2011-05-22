@@ -310,7 +310,7 @@ class ZoneModifySaveTest(unittest.TestCase):
     
     def test_file_size(self):
         size = os.stat(self.saved_filename)[6]
-        self.failUnlessEqual(size, 299)
+        self.failUnlessEqual(size, 534)
     
     def test_save_autoserial_greater(self):
         saved_filename = tempfile.mkstemp()[1]
