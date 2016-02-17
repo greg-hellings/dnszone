@@ -17,7 +17,11 @@ import os
 import sys
 from unittest import TextTestRunner, TestLoader
 
-from easyzone.easyzone import __version__
+here = os.path.dirname(__file__)
+with open(os.path.join(here, 'easyzone', 'easyzone.py')) as f:
+    for line in f:
+        if line.startswith('__version__ = '):
+            __version__ = line.split(' = ')[-1].strip(" '\"\n")
 
 
 class TestCommand(Command):
