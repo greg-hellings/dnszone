@@ -4,6 +4,10 @@ dnszone
 Overview
 --------
 
+This package is forked from [Easyzone](https://bitbucket.org/chrismiles/easyzone),
+created by Chris Miles. I have forked it to include bugfixes for installation
+and also to update the package for compatibility with Python 3.
+
 DNSZone is a package to manage the common record types of a
 zone file, including SOA records.  This module sits on top of
 the dnspython package and provides a higher level abstraction
