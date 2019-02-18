@@ -12,7 +12,7 @@ import tempfile
 import types
 import unittest
 
-from asyzone.asyzone import Name, SOA, Zone, RecordsError, ZoneError, \
+from dnszone.dnszone import Name, SOA, Zone, RecordsError, ZoneError, \
     zone_from_file
 
 
@@ -265,27 +265,27 @@ class ZoneModifyTest(unittest.TestCase):
         # delete name foo.example.com. from zone (and hence all
         # associated nodes for that name)
         self.zone.delete_name('foo.example.com.')
-        self.failUnlessEqual(self.zone.names.keys(), ['foofoo.example.com.',
-                                                      'bar.example.com.',
-                                                      'example.com.'])
+        self.assertEqual(self.zone.names.keys(), ['foofoo.example.com.',
+                                                  'bar.example.com.',
+                                                  'example.com.'])
 
     def test_names_bar_clear_all_records(self):
         # clear all records for bar.example.com.
         self.zone.names['bar.example.com.'].clear_all_records()
-        self.failUnlessEqual(self.zone.names.keys(), ['foo.example.com.',
-                                                      'foofoo.example.com.',
-                                                      'bar.example.com.',
-                                                      'example.com.'])
+        self.assertEqual(self.zone.names.keys(), ['foo.example.com.',
+                                                  'foofoo.example.com.',
+                                                  'bar.example.com.',
+                                                  'example.com.'])
         self.failUnlessEqual(self.zone.names['bar.example.com.'].records('A'),
                              None)
 
     def test_names_foo_clear_all_records_exclude(self):
         # clear records for foo.example.com. excluding some
         self.zone.names['foo.example.com.'].clear_all_records(exclude='MX')
-        self.failUnlessEqual(self.zone.names.keys(), ['foo.example.com.',
-                                                      'foofoo.example.com.',
-                                                      'bar.example.com.',
-                                                      'example.com.'])
+        self.assertEqual(self.zone.names.keys(), ['foo.example.com.',
+                                                  'foofoo.example.com.',
+                                                  'bar.example.com.',
+                                                  'example.com.'])
         self.failUnlessEqual(self.zone.names['foo.example.com.'].records('A'),
                              None)
         mx_items = self.zone.names['foo.example.com.'].records('MX').items
