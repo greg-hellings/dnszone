@@ -21,14 +21,15 @@ Main features:
 * Save back to zone file.
 * Auto-update serial (if necessary).
 
-http://pypi.python.org/pypi/dnszone
-https://github.com/greg-hellings/dnszone/
+Websites:
+* http://pypi.python.org/pypi/dnszone
+* https://github.com/greg-hellings/dnszone/
 
 
 Requirements
 ------------
 
-  * dnspython - http://www.dnspython.org/
+  * [dnspython](http://www.dnspython.org/)
 
 
 Build/Test/Install
@@ -36,20 +37,28 @@ Build/Test/Install
 
 Build::
 
+```bash
   $ python setup.py build
+```
 
 Test::
 
+```bash
   $ python setup.py test
+```
 
 Install::
 
+```bash
   $ python setup.py install
+```
 
 
 OR with setuptools::
 
+```bash
   $ easy_install dnszone
+```
 
 
 Examples
@@ -57,6 +66,7 @@ Examples
 
 dnszone::
 
+```
   >>> from dnszone import dnszone
   >>> z = dnszone.zone_from_file('example.com', '/var/namedb/example.com')
   >>> z.domain
@@ -79,9 +89,11 @@ dnszone::
   ['ns1.example.com.', 'ns3.example.com.']
 
   >>> z.save(autoserial=True)
+```
 
 ZoneCheck::
 
+```
   >>> from dnszone.zone_check import ZoneCheck
   >>> c = ZoneCheck()
   >>> c.isValid('example.com', '/var/named/zones/example.com')
@@ -95,9 +107,11 @@ ZoneCheck::
   >>> c.isValid('example.com', '/var/named/zones/example.com')
   True
   >>>
+```
 
 ZoneReload::
 
+```
   >>> from dnszone.zone_reload import ZoneReload
   >>> r = ZoneReload()
   >>> r.reload('example.com')
@@ -114,3 +128,4 @@ ZoneReload::
   >>> r.reload('example.com')
   zone reload up-to-date
   >>>
+```
