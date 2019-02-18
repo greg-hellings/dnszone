@@ -6,7 +6,7 @@ A wrapper around 'rndc' for requesting zone reloads from named.
 
 Example::
 
-    >>> from easyzone.zone_reload import ZoneReload
+    >>> from dnszone.zone_reload import ZoneReload
     >>> r = ZoneReload()
     >>> r.reload('example.com')
     zone reload up-to-date
@@ -14,18 +14,18 @@ Example::
     rndc: 'reload' failed: not found
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
-      File "easyzone/zone_reload.py", line 51, in reload
+      File "dnszone/zone_reload.py", line 51, in reload
         raise ZoneReloadError("rndc failed with return code %d" % r)
-    easyzone.zone_reload.ZoneReloadError: rndc failed with return code 1
-    >>> 
+    dnszone.zone_reload.ZoneReloadError: rndc failed with return code 1
+    >>>
     >>> r = ZoneReload(rndc='/usr/sbin/rndc')
     >>> r.reload('example.com')
     zone reload up-to-date
     >>>
 '''
 
-__author__ = 'Chris Miles'
-__copyright__ = '(c) Chris Miles 2007'
+__author__ = 'Greg Hellings'
+__copyright__ = '(c) Greg Hellings 2019'
 __id__ = '$Id$'
 __url__ = '$URL$'
 __version__ = '1.0'
@@ -49,13 +49,13 @@ class ZoneReloadError(Exception):
 class ZoneReload(object):
     '''A wrapper around bind's rndc utility, used for reloading a modified
     DNS zone.
-    
+
     `rndc` : string containing path to rndc binary.  Or leave as "rndc"
     to search with default PATH.
     '''
     def __init__(self, rndc='rndc'):
         self.rndc = rndc
-    
+
     def reload(self, zone):
         '''Ask named to perform a zone reload by calling the
         rndc commmand.
@@ -65,10 +65,8 @@ class ZoneReload(object):
             'reload',
             zone
         ]
-        
+
         r = subprocess.call(cmd)
-        
+
         if r != 0:
             raise ZoneReloadError("rndc failed with return code %d" % r)
-    
-

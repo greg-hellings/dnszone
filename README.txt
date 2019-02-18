@@ -1,10 +1,10 @@
-easyzone
+dnszone
 ========
 
 Overview
 --------
 
-Easyzone is a package to manage the common record types of a
+DNSZone is a package to manage the common record types of a
 zone file, including SOA records.  This module sits on top of
 the dnspython package and provides a higher level abstraction
 for common zone file manipulation use cases.
@@ -17,9 +17,8 @@ Main features:
 * Save back to zone file.
 * Auto-update serial (if necessary).
 
-http://www.psychofx.com/easyzone/
-http://pypi.python.org/pypi/easyzone
-https://bitbucket.org/chrismiles/easyzone/
+http://pypi.python.org/pypi/dnszone
+https://github.com/greg-hellings/dnszone/
 
 
 Requirements
@@ -46,16 +45,16 @@ Install::
 
 OR with setuptools::
 
-  $ easy_install easyzone
+  $ easy_install dnszone
 
 
 Examples
 --------
 
-easyzone::
+dnszone::
 
-  >>> from easyzone import easyzone
-  >>> z = easyzone.zone_from_file('example.com', '/var/namedb/example.com')
+  >>> from dnszone import dnszone
+  >>> z = dnszone.zone_from_file('example.com', '/var/namedb/example.com')
   >>> z.domain
   'example.com.'
   >>> z.root.soa.serial
@@ -79,7 +78,7 @@ easyzone::
 
 ZoneCheck::
 
-  >>> from easyzone.zone_check import ZoneCheck
+  >>> from dnszone.zone_check import ZoneCheck
   >>> c = ZoneCheck()
   >>> c.isValid('example.com', '/var/named/zones/example.com')
   True
@@ -87,7 +86,7 @@ ZoneCheck::
   False
   >>> c.error
   'Bad syntax'
-  >>> 
+  >>>
   >>> c = ZoneCheck(checkzone='/usr/sbin/named-checkzone')
   >>> c.isValid('example.com', '/var/named/zones/example.com')
   True
@@ -95,7 +94,7 @@ ZoneCheck::
 
 ZoneReload::
 
-  >>> from easyzone.zone_reload import ZoneReload
+  >>> from dnszone.zone_reload import ZoneReload
   >>> r = ZoneReload()
   >>> r.reload('example.com')
   zone reload up-to-date
@@ -103,10 +102,10 @@ ZoneReload::
   rndc: 'reload' failed: not found
   Traceback (most recent call last):
     File "<stdin>", line 1, in <module>
-    File "easyzone/zone_reload.py", line 51, in reload
+    File "dnszone/zone_reload.py", line 51, in reload
       raise ZoneReloadError("rndc failed with return code %d" % r)
-  easyzone.zone_reload.ZoneReloadError: rndc failed with return code 1
-  >>> 
+  dnszone.zone_reload.ZoneReloadError: rndc failed with return code 1
+  >>>
   >>> r = ZoneReload(rndc='/usr/sbin/rndc')
   >>> r.reload('example.com')
   zone reload up-to-date
