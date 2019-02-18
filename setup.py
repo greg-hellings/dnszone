@@ -215,6 +215,7 @@ if use_setuptools:
         install_requires=[
             # -*- Extra requirements: -*-
             "dnspython",
+            "six",
         ],
         entry_points="""
         # -*- Entry points: -*-

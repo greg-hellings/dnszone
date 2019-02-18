@@ -17,7 +17,7 @@ __version__ = '1.2.3'
 
 # - Python Modules -
 from time import localtime, strftime, time
-import types
+from six import string_types, integer_types, next
 
 # - dnspython Modules - http://www.dnspython.org/
 try:
@@ -126,17 +126,17 @@ class Records(object):
 
     def add(self, item):
         if self.type == 'MX':
-            assert isinstance(item, types.TupleType)
+            assert isinstance(item, tuple)
             assert len(item) == 2
-            assert isinstance(item[0], types.IntType)
-            assert isinstance(item[1], types.StringType)
+            assert isinstance(item[0], integer_types)
+            assert isinstance(item[1], string_types)
         elif self.type == 'TXT':
-            assert isinstance(item, types.StringType)
+            assert isinstance(item, string_types)
             if item.startswith('"') and item.endswith('"'):
                 # dns module auto-adds quotation marks
                 item = item[1:-1]
         else:
-            assert isinstance(item, types.StringType)
+            assert isinstance(item, string_types)
 
         rd = _new_rdata(self.type, item)
         self._rdataset.add(rd)
@@ -154,10 +154,11 @@ class Records(object):
 
     def next(self):
         if self.type == 'MX':
-            r = self._item_iter.next()
+            r = next(self._item_iter)
             return (r.preference, str(r.exchange))
         else:
-            return str(self._item_iter.next())
+            return str(next(self._item_iter))
+    __next__ = next
 
     def get_items(self):
         return [r for r in self]
@@ -226,7 +227,7 @@ class Zone(object):
     '''Represents a DNS zone.
     '''
     def __init__(self, domain):
-        if not domain or not isinstance(domain, types.StringTypes):
+        if not domain or not isinstance(domain, string_types):
             raise ZoneError('Invalid domain')
         if domain[-1] != '.':
             domain = domain + '.'

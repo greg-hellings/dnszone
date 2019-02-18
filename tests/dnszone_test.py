@@ -9,12 +9,11 @@ Copyright (c) 2019 Greg Hellings. All rights reserved.
 
 import os
 import tempfile
-import types
 import unittest
 
-from collections import Counter
 from dnszone.dnszone import Name, SOA, Zone, RecordsError, ZoneError, \
     zone_from_file
+from six import assertCountEqual
 
 
 class BasicZoneTest(unittest.TestCase):
@@ -97,7 +96,7 @@ class ZoneLoadTest(unittest.TestCase):
 
     def test_names_type(self):
         names = self.zone.names
-        self.assertEqual(type(names), types.DictType)
+        self.assertIsInstance(names, dict)
 
     def test_names_foo_A(self):
         records = self.zone.names['foo.example.com.'].records('A').items
@@ -267,14 +266,14 @@ class ZoneModifyTest(unittest.TestCase):
         # associated nodes for that name)
         self.zone.delete_name('foo.example.com.')
         expected = ['foofoo.example.com.', 'bar.example.com.', 'example.com.']
-        self.assertEqual(Counter(self.zone.names.keys()), Counter(expected))
+        assertCountEqual(self, self.zone.names.keys(), expected)
 
     def test_names_bar_clear_all_records(self):
         # clear all records for bar.example.com.
         self.zone.names['bar.example.com.'].clear_all_records()
         expected = ['foo.example.com.', 'foofoo.example.com.',
                     'bar.example.com.', 'example.com.']
-        self.assertEqual(Counter(self.zone.names.keys()), Counter(expected))
+        assertCountEqual(self, self.zone.names.keys(), expected)
         self.assertIsNone(self.zone.names['bar.example.com.'].records('A'))
 
     def test_names_foo_clear_all_records_exclude(self):
@@ -282,7 +281,7 @@ class ZoneModifyTest(unittest.TestCase):
         self.zone.names['foo.example.com.'].clear_all_records(exclude='MX')
         expected = ['foo.example.com.', 'foofoo.example.com.',
                     'bar.example.com.', 'example.com.']
-        self.assertEqual(Counter(self.zone.names.keys()), Counter(expected))
+        assertCountEqual(self, self.zone.names.keys(), expected)
         self.assertIsNone(self.zone.names['foo.example.com.'].records('A'))
         mx_items = self.zone.names['foo.example.com.'].records('MX').items
         self.assertEqual(mx_items, [(10, 'mail.example.com.')])
