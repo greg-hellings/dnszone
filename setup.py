@@ -25,7 +25,7 @@ with open(os.path.join(here, 'dnszone', 'dnszone.py')) as f:
 with open(os.path.join(here, 'README.md')) as f:
     readme_lines = []
     for line in f:
-        readme_lines.append(f)
+        readme_lines.append(line)
 
 
 class TestCommand(Command):
@@ -84,7 +84,7 @@ setup_args = dict(
     author='Greg Hellings',
     author_email='greg.hellings@gmail.com',
     description='Easy Zone - DNS Zone abstraction module',
-    long_description=readme_lines.join('\n'),
+    long_description=str("\n").join(readme_lines),
     url='https://github.com/greg-hellings/dnszone',
     packages=['dnszone'],
     cmdclass={'test': TestCommand, 'clean': CleanCommand},
