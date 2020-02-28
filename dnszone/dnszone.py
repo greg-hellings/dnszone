@@ -10,7 +10,7 @@ for common zone file manipulation use cases.
 
 __author__ = 'Greg Hellings'
 __copyright__ = '(c) Greg Hellings 2019'
-__version__ = '2.0.1'
+__version__ = '2.0.2'
 
 
 # ---- Imports ----

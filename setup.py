@@ -85,6 +85,7 @@ setup_args = dict(
     author_email='greg.hellings@gmail.com',
     description='Easy Zone - DNS Zone abstraction module',
     long_description=str("\n").join(readme_lines),
+    long_description_content_type="text/markdown",
     url='https://github.com/greg-hellings/dnszone',
     packages=['dnszone'],
     cmdclass={'test': TestCommand, 'clean': CleanCommand},
