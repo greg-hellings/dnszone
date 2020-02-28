@@ -114,6 +114,12 @@ class ZoneLoadTest(unittest.TestCase):
         records = self.zone.names['foofoo.example.com.'].records('CNAME').items
         self.assertEqual(records, ['foo.example.com.'])
 
+    def test_names_barbar_AAAA(self):
+        records = self.zone.names['barbar.example.com.'].records('AAAA').items
+        self.assertEqual(records,
+                         ['0000:0000:0000:0000:0000:0000:0000:0001',
+                          '0000:0000:0000:0000:0000:0000:0000:0002'])
+
     def test_names_root_A(self):
         records = self.zone.names['example.com.'].records('A').items
         self.assertEqual(records, ['10.0.0.1'])
@@ -211,11 +217,26 @@ class ZoneModifyTest(unittest.TestCase):
         records = self.zone.names['bar.example.com.'].records('A').items
         self.assertEqual(records, ['10.0.0.2', '10.0.0.3', '10.20.30.40'])
 
+    def test_names_add_barbar_AAAA(self):
+        # add AAAA record to barbar.example.com.
+        self.zone.names['barbar.example.com.'].records('AAAA').add('0000:0000:0000:0000:0000:0000:0000:0003')
+        records = self.zone.names['barbar.example.com.'].records('AAAA').items
+        self.assertEqual(records,
+                         ['0000:0000:0000:0000:0000:0000:0000:0001',
+                          '0000:0000:0000:0000:0000:0000:0000:0002',
+                          '0000:0000:0000:0000:0000:0000:0000:0003'])
+
     def test_names_delete_bar_A(self):
         # delete A record from bar.example.com.
         self.zone.names['bar.example.com.'].records('A').delete('10.0.0.2')
         records = self.zone.names['bar.example.com.'].records('A').items
         self.assertEqual(records, ['10.0.0.3'])
+
+    def test_names_delete_barbar_AAAA(self):
+        # delete AAAA record from barbar.example.com
+        self.zone.names['barbar.example.com.'].records('AAAA').delete('0000:0000:0000:0000:0000:0000:0000:0001')
+        records = self.zone.names['barbar.example.com.'].records('AAAA').items
+        self.assertEqual(records, ['0000:0000:0000:0000:0000:0000:0000:0002'])
 
     def test_names_add_poppy_CNAME(self):
         # add CNAME record poppy.example.com.
@@ -265,14 +286,16 @@ class ZoneModifyTest(unittest.TestCase):
         # delete name foo.example.com. from zone (and hence all
         # associated nodes for that name)
         self.zone.delete_name('foo.example.com.')
-        expected = ['foofoo.example.com.', 'bar.example.com.', 'example.com.']
-        assertCountEqual(self, self.zone.names.keys(), expected)
+        expected = ['barbar.example.com.', 'foofoo.example.com.', 'bar.example.com.',
+                    'example.com.']
+        assertCountEqual(self, self.zone.names.keys(), expected, msg=("%s | %s") % (self.zone.names.keys(), expected))
 
     def test_names_bar_clear_all_records(self):
         # clear all records for bar.example.com.
         self.zone.names['bar.example.com.'].clear_all_records()
-        expected = ['foo.example.com.', 'foofoo.example.com.',
-                    'bar.example.com.', 'example.com.']
+        expected = ['barbar.example.com.', 'foo.example.com.',
+                    'foofoo.example.com.', 'bar.example.com.',
+                    'example.com.']
         assertCountEqual(self, self.zone.names.keys(), expected)
         self.assertIsNone(self.zone.names['bar.example.com.'].records('A'))
 
@@ -280,7 +303,7 @@ class ZoneModifyTest(unittest.TestCase):
         # clear records for foo.example.com. excluding some
         self.zone.names['foo.example.com.'].clear_all_records(exclude='MX')
         expected = ['foo.example.com.', 'foofoo.example.com.',
-                    'bar.example.com.', 'example.com.']
+                    'bar.example.com.', 'example.com.', 'barbar.example.com.']
         assertCountEqual(self, self.zone.names.keys(), expected)
         self.assertIsNone(self.zone.names['foo.example.com.'].records('A'))
         mx_items = self.zone.names['foo.example.com.'].records('MX').items
@@ -333,6 +356,8 @@ class ZoneModifySaveTest(unittest.TestCase):
 
         self.zone.delete_name('foofoo.example.com.')
 
+        self.zone.delete_name('barbar.example.com')
+
         self.saved_filename = tempfile.mkstemp()[1]
         # self.saved_filename = '/var/tmp/foo.tmp'
         self.zone.save(self.saved_filename)
@@ -342,7 +367,7 @@ class ZoneModifySaveTest(unittest.TestCase):
 
     def test_file_size(self):
         size = os.stat(self.saved_filename)[6]
-        self.assertEqual(size, 534)
+        self.assertEqual(size, 682)
 
     def test_save_autoserial_greater(self):
         saved_filename = tempfile.mkstemp()[1]
