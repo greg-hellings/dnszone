@@ -219,12 +219,13 @@ class ZoneModifyTest(unittest.TestCase):
 
     def test_names_add_barbar_AAAA(self):
         # add AAAA record to barbar.example.com.
-        self.zone.names['barbar.example.com.'].records('AAAA').add('0000:0000:0000:0000:0000:0000:0000:0003')
+        ipv6_3 = '0000:0000:0000:0000:0000:0000:0000:0003'
+        self.zone.names['barbar.example.com.'].records('AAAA').add(ipv6_3)
         records = self.zone.names['barbar.example.com.'].records('AAAA').items
         self.assertEqual(records,
                          ['0000:0000:0000:0000:0000:0000:0000:0001',
                           '0000:0000:0000:0000:0000:0000:0000:0002',
-                          '0000:0000:0000:0000:0000:0000:0000:0003'])
+                          ipv6_3])
 
     def test_names_delete_bar_A(self):
         # delete A record from bar.example.com.
@@ -234,7 +235,8 @@ class ZoneModifyTest(unittest.TestCase):
 
     def test_names_delete_barbar_AAAA(self):
         # delete AAAA record from barbar.example.com
-        self.zone.names['barbar.example.com.'].records('AAAA').delete('0000:0000:0000:0000:0000:0000:0000:0001')
+        ipv6_1 = '0000:0000:0000:0000:0000:0000:0000:0001'
+        self.zone.names['barbar.example.com.'].records('AAAA').delete(ipv6_1)
         records = self.zone.names['barbar.example.com.'].records('AAAA').items
         self.assertEqual(records, ['0000:0000:0000:0000:0000:0000:0000:0002'])
 
@@ -286,9 +288,10 @@ class ZoneModifyTest(unittest.TestCase):
         # delete name foo.example.com. from zone (and hence all
         # associated nodes for that name)
         self.zone.delete_name('foo.example.com.')
-        expected = ['barbar.example.com.', 'foofoo.example.com.', 'bar.example.com.',
-                    'example.com.']
-        assertCountEqual(self, self.zone.names.keys(), expected, msg=("%s | %s") % (self.zone.names.keys(), expected))
+        expected = ['barbar.example.com.', 'foofoo.example.com.',
+                    'bar.example.com.', 'example.com.']
+        assertCountEqual(self, self.zone.names.keys(), expected,
+                         msg=("%s | %s") % (self.zone.names.keys(), expected))
 
     def test_names_bar_clear_all_records(self):
         # clear all records for bar.example.com.
