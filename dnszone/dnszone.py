@@ -31,6 +31,7 @@ import dns.rdtypes.ANY.CNAME
 import dns.rdtypes.ANY.NS
 import dns.rdtypes.ANY.MX
 import dns.rdtypes.IN.A
+import dns.rdtypes.IN.AAAA
 import dns.rdtypes.ANY.TXT
 
 
@@ -317,7 +318,7 @@ def zone_from_file(domain, filename):
 
 def _new_rdata(rectype, *args):
     '''Create a new rdata type of `rectype`.
-    rectype must be one of: 'NS', 'MX', 'A', 'CNAME', 'TXT'
+    rectype must be one of: 'NS', 'MX', 'A', 'CNAME', 'TXT', 'AAAA'
     Extra arguments are as required by the rectype.
     '''
     if rectype == 'NS':
@@ -341,6 +342,10 @@ def _new_rdata(rectype, *args):
         rd = dns.rdtypes.ANY.TXT.TXT(dns.rdataclass.IN,
                                      dns.rdatatype.TXT,
                                      args[0])
+    elif rectype == 'AAAA':
+        rd = dns.rdtypes.IN.AAAA.AAAA(dns.rdataclass.IN,
+                                      dns.rdatatype.AAAA,
+                                      args[0])
     else:
         raise ValueError("rectype not supported: %s" % rectype)
 

@@ -8,15 +8,15 @@ $TTL 86400
                         86400           ; Min TTL
                         )
 
-        IN      NS      ns1.example.com. 
-        IN      NS      ns2.example.com. 
+        IN      NS      ns1.example.com.
+        IN      NS      ns2.example.com.
 
         IN      MX      10 mail.example.com.
         IN      MX      20 mail2.example.com.
-        
+
         IN      A       10.0.0.1
 
-                
+
 
 $ORIGIN example.com.
 
@@ -27,3 +27,6 @@ bar     IN      A       10.0.0.2
         IN      A       10.0.0.3
 
 foofoo  IN      CNAME   foo.example.com.
+
+barbar  IN      AAAA    0000:0000:0000:0000:0000:0000:0000:0001
+        IN      AAAA    0000:0000:0000:0000:0000:0000:0000:0002
