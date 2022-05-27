@@ -1,5 +1,5 @@
 # This file is generated
-./dnszone/version.py
+dnszone/version.py
 
 .*.swp
 *.egg-info
