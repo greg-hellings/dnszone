@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-'''zone_check
+"""zone_check
 
 A wrapper around 'named-checkzone' for checking the validity and syntax of
 zone files.
@@ -20,13 +20,13 @@ Example::
     >>> c.isValid('example.com', '/var/named/zones/example.com')
     True
     >>>
-'''
+"""
 
-__author__ = 'Greg Hellings'
-__copyright__ = '(c) Greg Hellings 2019'
-__id__ = '$Id$'
-__url__ = '$URL$'
-__version__ = '1.0'
+__author__ = "Greg Hellings"
+__copyright__ = "(c) Greg Hellings 2019"
+__id__ = "$Id$"
+__url__ = "$URL$"
+__version__ = "1.0"
 
 
 # ---- Imports ----
@@ -34,38 +34,34 @@ __version__ = '1.0'
 # - Python Modules -
 import subprocess
 
-
 # ---- Exceptions ----
 
 
 # ---- Classes ----
 
+
 class ZoneCheck(object):
-    '''A wrapper around bind's named-checkzone utility, used for checking the
+    """A wrapper around bind's named-checkzone utility, used for checking the
     syntax of a zone file.
 
     `checkzone` : string containing path to named-checkzone binary.  Or leave
     as "named-checkzone" to search with default PATH.
-    '''
-    def __init__(self, checkzone='checkzone'):
+    """
+
+    def __init__(self, checkzone="checkzone"):
         self.checkzone = checkzone
         self.error = None
 
     def isValid(self, zonename, filename):
-        '''Ask named to check the syntax of a zone file by calling the
+        """Ask named to check the syntax of a zone file by calling the
         named-checkzone commmand.
-        '''
-        cmd = [
-            self.checkzone,
-            '-q',
-            zonename,
-            filename
-        ]
+        """
+        cmd = [self.checkzone, "-q", zonename, filename]
 
         r = subprocess.call(cmd)
 
         if r != 0:
-            self.error = 'Bad syntax'
+            self.error = "Bad syntax"
             return False
 
         else:
