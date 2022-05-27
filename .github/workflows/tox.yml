@@ -69,7 +69,7 @@ jobs:
         env:
           COVERAGE_FILE: .coverage.${{ matrix.python-version }}
       - name: upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: coverage-results
           path: .coverage.${{ matrix.python-version }}
@@ -82,9 +82,10 @@ jobs:
       - uses: actions/setup-python@v3
         with:
           python-version: "3.x"
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: coverage-results
+          path: .
       - name: run coverage
         run: |
           python3 -m pip install tox codecov
