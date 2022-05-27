@@ -105,7 +105,7 @@ if use_setuptools:
         zip_safe=False,
         install_requires=[
             # -*- Extra requirements: -*-
-            "dnspython",
+            "dnspython<2",
             "six",
         ],
         entry_points="""
