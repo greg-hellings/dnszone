@@ -90,9 +90,11 @@ jobs:
         run: |
           python3 -m pip install tox codecov
           python3 -m tox -e coverage
-          codecov -X pycov -X gcov
-        env:
-          CODECOV_TOKEN: ${{ secrets.codecov_token }}
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          fail_ci_if_error: true
+          token: ${{ secrets.codecov_token }}
 
   publish:
     needs:
