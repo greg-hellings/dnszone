@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-'''zone_reload
+"""zone_reload
 
 A wrapper around 'rndc' for requesting zone reloads from named.
 
@@ -22,13 +22,13 @@ Example::
     >>> r.reload('example.com')
     zone reload up-to-date
     >>>
-'''
+"""
 
-__author__ = 'Greg Hellings'
-__copyright__ = '(c) Greg Hellings 2019'
-__id__ = '$Id$'
-__url__ = '$URL$'
-__version__ = '1.0'
+__author__ = "Greg Hellings"
+__copyright__ = "(c) Greg Hellings 2019"
+__id__ = "$Id$"
+__url__ = "$URL$"
+__version__ = "1.0"
 
 
 # ---- Imports ----
@@ -36,35 +36,32 @@ __version__ = '1.0'
 # - Python Modules -
 import subprocess
 
-
 # ---- Exceptions ----
 
+
 class ZoneReloadError(Exception):
-    '''An error occurred within ZoneReload.
-    '''
+    """An error occurred within ZoneReload."""
 
 
 # ---- Classes ----
 
+
 class ZoneReload(object):
-    '''A wrapper around bind's rndc utility, used for reloading a modified
+    """A wrapper around bind's rndc utility, used for reloading a modified
     DNS zone.
 
     `rndc` : string containing path to rndc binary.  Or leave as "rndc"
     to search with default PATH.
-    '''
-    def __init__(self, rndc='rndc'):
+    """
+
+    def __init__(self, rndc="rndc"):
         self.rndc = rndc
 
     def reload(self, zone):
-        '''Ask named to perform a zone reload by calling the
+        """Ask named to perform a zone reload by calling the
         rndc commmand.
-        '''
-        cmd = [
-            self.rndc,
-            'reload',
-            zone
-        ]
+        """
+        cmd = [self.rndc, "reload", zone]
 
         r = subprocess.call(cmd)
 

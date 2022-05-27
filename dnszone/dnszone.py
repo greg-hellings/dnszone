@@ -1,59 +1,62 @@
 # encoding: utf-8
 
-'''dnszone
+"""dnszone
 
 A module to manage the common record types of a zone file,
 including SOA records.  This module sits on top of the
 dnspython package and provides a higher level abstraction
 for common zone file manipulation use cases.
-'''
+"""
 
-__author__ = 'Greg Hellings'
-__copyright__ = '(c) Greg Hellings 2019'
-__version__ = '2.0.2'
+__author__ = "Greg Hellings"
+__copyright__ = "(c) Greg Hellings 2019"
+__version__ = "2.0.2"
 
 
 # ---- Imports ----
 
 # - Python Modules -
 from time import localtime, strftime, time
-from six import string_types, integer_types, next
+
+from six import integer_types, next, string_types
 
 # - dnspython Modules - http://www.dnspython.org/
 try:
     import dns.zone
 except ImportError:
     import sys
+
     sys.stderr.write("Requires dns module from http://www.dnspython.org/\n")
     sys.exit(1)
 
 import dns.rdtypes.ANY.CNAME
-import dns.rdtypes.ANY.NS
 import dns.rdtypes.ANY.MX
+import dns.rdtypes.ANY.NS
+import dns.rdtypes.ANY.TXT
 import dns.rdtypes.IN.A
 import dns.rdtypes.IN.AAAA
-import dns.rdtypes.ANY.TXT
-
 
 # ---- Exceptions ----
 
+
 class ZoneError(Exception):
-    '''An error from dnszone.Zone'''
+    """An error from dnszone.Zone"""
 
 
 class NameError(Exception):
-    '''An error from dnszone.Name'''
+    """An error from dnszone.Name"""
 
 
 class RecordsError(Exception):
-    '''An error from dnszone.Records'''
+    """An error from dnszone.Records"""
 
 
 # ---- Classes ----
 
+
 class SOA(object):
-    '''Represents the SOA fields of the root node of a Zone.
-    '''
+    """Represents the SOA fields of the root node of a Zone."""
+
     def __init__(self, soa):
         self._soa = soa
 
@@ -61,7 +64,7 @@ class SOA(object):
         return str(self._soa.mname)
 
     def set_mname(self, value):
-        name = dns.name.Name(value.split('.'))
+        name = dns.name.Name(value.split("."))
         self._soa.mname = name
 
     mname = property(get_mname, set_mname)
@@ -70,7 +73,7 @@ class SOA(object):
         return str(self._soa.rname)
 
     def set_rname(self, value):
-        name = dns.name.Name(value.split('.'))
+        name = dns.name.Name(value.split("."))
         self._soa.rname = name
 
     rname = property(get_rname, set_rname)
@@ -117,21 +120,22 @@ class SOA(object):
 
 
 class Records(object):
-    '''Represents the records associated with a name node.
+    """Represents the records associated with a name node.
     Record items are common DNS types such as 'A', 'MX',
     'NS', etc.
-    '''
+    """
+
     def __init__(self, rectype, rdataset):
         self.type = rectype
         self._rdataset = rdataset
 
     def add(self, item):
-        if self.type == 'MX':
+        if self.type == "MX":
             assert isinstance(item, tuple)
             assert len(item) == 2
             assert isinstance(item[0], integer_types)
             assert isinstance(item[1], string_types)
-        elif self.type == 'TXT':
+        elif self.type == "TXT":
             assert isinstance(item, string_types)
             if item.startswith('"') and item.endswith('"'):
                 # dns module auto-adds quotation marks
@@ -154,11 +158,12 @@ class Records(object):
         return self
 
     def next(self):
-        if self.type == 'MX':
+        if self.type == "MX":
             r = next(self._item_iter)
             return (r.preference, str(r.exchange))
         else:
             return str(next(self._item_iter))
+
     __next__ = next
 
     def get_items(self):
@@ -168,7 +173,7 @@ class Records(object):
 
 
 class Name(object):
-    '''Represents a name node within a zone file.  This could
+    """Represents a name node within a zone file.  This could
     be the root node (the zone itself) or a hostname or subdomain
     node.
 
@@ -180,7 +185,8 @@ class Name(object):
 
     If the node contains SOA fields (i.e. the  root ('@') node)
     then the `soa` attribute points to an SOA object.
-    '''
+    """
+
     def __init__(self, name, node=None, ttl=None):
         self.name = name
         self.soa = None
@@ -210,8 +216,7 @@ class Name(object):
         return rec
 
     def clear_all_records(self, exclude=None):
-        '''Clear all the records for this name node.
-        '''
+        """Clear all the records for this name node."""
         if exclude is None:
             self._node.rdatasets = []
         else:
@@ -225,37 +230,34 @@ class Name(object):
 
 
 class Zone(object):
-    '''Represents a DNS zone.
-    '''
+    """Represents a DNS zone."""
+
     def __init__(self, domain):
         if not domain or not isinstance(domain, string_types):
-            raise ZoneError('Invalid domain')
-        if domain[-1] != '.':
-            domain = domain + '.'
+            raise ZoneError("Invalid domain")
+        if domain[-1] != ".":
+            domain = domain + "."
         self.domain = domain
 
         self._zone = None
 
     def load_from_file(self, filename):
-        '''Load the details of a zone from zone file `filename`.
-        '''
+        """Load the details of a zone from zone file `filename`."""
         self.filename = filename
-        self._zone = dns.zone.from_file(filename,
-                                        self.domain,
-                                        relativize=False)
+        self._zone = dns.zone.from_file(filename, self.domain, relativize=False)
 
     def get_root(self):
-        '''Return the root ("@") name of the zone as a Name object.
-        '''
+        """Return the root ("@") name of the zone as a Name object."""
         if not self._zone:
             return None
 
-        return Name('@', self._zone[self.domain])
+        return Name("@", self._zone[self.domain])
+
     root = property(get_root)
 
     def get_names(self):
-        '''Return a dictionary of names, keyed by name as string,
-        with values as corresponding Name objects.'''
+        """Return a dictionary of names, keyed by name as string,
+        with values as corresponding Name objects."""
         if not self._zone:
             return None
 
@@ -268,24 +270,25 @@ class Zone(object):
             names[name] = nameobj
 
         return names
+
     names = property(get_names)
 
     def add_name(self, name):
-        '''Add a new name (hostname) to the zone.
+        """Add a new name (hostname) to the zone.
         If a node with the same name already exists it is returned instead.
-        '''
+        """
         node = self._zone.get_node(name, create=True)
         if node is None:
             raise ZoneError("Could not create node named: %s" % name)
 
     def delete_name(self, name):
-        '''Remove all nodes associated with a name (hostname) from the zone.
+        """Remove all nodes associated with a name (hostname) from the zone.
         If no such nodes exist, nothing happens.
-        '''
+        """
         self._zone.delete_node(name)
 
     def save(self, filename=None, autoserial=False):
-        '''Write the zone back to a file.
+        """Write the zone back to a file.
 
         If `filename` is not specified the zone will be written
         over the top of the file it was read from.
@@ -293,10 +296,10 @@ class Zone(object):
         if `autoserial`is True then the serial will be updated to the
         current date in common YYYYMMDDxx format.  The serial is
         guaranteed to be larger than the previous number.
-        '''
+        """
         if autoserial:
             soa = self.root.soa
-            new_serial = int(strftime('%Y%m%d00', localtime(time())))
+            new_serial = int(strftime("%Y%m%d00", localtime(time())))
             if new_serial <= soa.serial:
                 new_serial = soa.serial + 1
             soa.serial = new_serial
@@ -308,44 +311,39 @@ class Zone(object):
 
 # ---- Module Functions ----
 
+
 def zone_from_file(domain, filename):
-    '''Read a zone file and return the contents as a Zone object.
-    '''
+    """Read a zone file and return the contents as a Zone object."""
     zone = Zone(domain)
     zone.load_from_file(filename)
     return zone
 
 
 def _new_rdata(rectype, *args):
-    '''Create a new rdata type of `rectype`.
+    """Create a new rdata type of `rectype`.
     rectype must be one of: 'NS', 'MX', 'A', 'CNAME', 'TXT', 'AAAA'
     Extra arguments are as required by the rectype.
-    '''
-    if rectype == 'NS':
-        name = dns.name.Name(args[0].split('.'))
+    """
+    if rectype == "NS":
+        name = dns.name.Name(args[0].split("."))
         rd = dns.rdtypes.ANY.NS.NS(dns.rdataclass.IN, dns.rdatatype.NS, name)
-    elif rectype == 'MX':
+    elif rectype == "MX":
         preference = args[0][0]
-        exchange = dns.name.Name(args[0][1].split('.'))
-        rd = dns.rdtypes.ANY.MX.MX(dns.rdataclass.IN, dns.rdatatype.MX,
-                                   preference, exchange)
-    elif rectype == 'A':
+        exchange = dns.name.Name(args[0][1].split("."))
+        rd = dns.rdtypes.ANY.MX.MX(
+            dns.rdataclass.IN, dns.rdatatype.MX, preference, exchange
+        )
+    elif rectype == "A":
         # name = dns.name.Name( args[0].split('.') )
         name = args[0]
         rd = dns.rdtypes.IN.A.A(dns.rdataclass.IN, dns.rdatatype.A, name)
-    elif rectype == 'CNAME':
-        name = dns.name.Name(args[0].split('.'))
-        rd = dns.rdtypes.ANY.CNAME.CNAME(dns.rdataclass.IN,
-                                         dns.rdatatype.CNAME,
-                                         name)
-    elif rectype == 'TXT':
-        rd = dns.rdtypes.ANY.TXT.TXT(dns.rdataclass.IN,
-                                     dns.rdatatype.TXT,
-                                     args[0])
-    elif rectype == 'AAAA':
-        rd = dns.rdtypes.IN.AAAA.AAAA(dns.rdataclass.IN,
-                                      dns.rdatatype.AAAA,
-                                      args[0])
+    elif rectype == "CNAME":
+        name = dns.name.Name(args[0].split("."))
+        rd = dns.rdtypes.ANY.CNAME.CNAME(dns.rdataclass.IN, dns.rdatatype.CNAME, name)
+    elif rectype == "TXT":
+        rd = dns.rdtypes.ANY.TXT.TXT(dns.rdataclass.IN, dns.rdatatype.TXT, args[0])
+    elif rectype == "AAAA":
+        rd = dns.rdtypes.IN.AAAA.AAAA(dns.rdataclass.IN, dns.rdatatype.AAAA, args[0])
     else:
         raise ValueError("rectype not supported: %s" % rectype)
 
