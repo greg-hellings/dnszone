@@ -19,7 +19,7 @@ jobs:
   lint:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v3.0.0
         with:
           python-version: "3.x"
@@ -32,7 +32,7 @@ jobs:
   packaging:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v3.0.0
         with:
           python-version: "3.x"
@@ -53,11 +53,10 @@ jobs:
           - name: py39
             python-version: "3.9"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
-          cache: pip
       - name: run test
         run: |
           python3 -m pip install tox
@@ -74,7 +73,7 @@ jobs:
     needs: test
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v3.0.0
         with:
           python-version: "3.x"
@@ -104,7 +103,7 @@ jobs:
 
     steps:
       - name: Check out src from Git
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           # Get shallow Git history (default) for release events
           # but have a complete clone for any other workflows.
