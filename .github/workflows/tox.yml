@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: Generate matrix
         id: generate_matrix
-        uses: coations/dynamic-matrix@v1
+        uses: coactions/dynamic-matrix@v1
         with:
           other_names: |
             lint
@@ -82,7 +82,7 @@ jobs:
     needs:
       - coverage
     if: github.event_name == 'release'  # Only release during tags
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     env:
       PY_COLORS: 1
