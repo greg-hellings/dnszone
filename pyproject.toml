@@ -7,6 +7,33 @@ requires = [
 ]
 build-backend = 'setuptools.build_meta'
 
+[project]
+name = "dnszone"
+description = "Fork of Easy Zone - DNS Zone abstraction module"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+keywords = []
+classifiers = [
+	"Programming Language :: Python :: 3",
+	"Development Status :: 4 - Beta",
+	"License :: OSI Approved :: MIT License",
+	"Topic :: Internet :: Name Service (DNS)",
+	"Topic :: System :: Systems Administration"
+]
+dependencies = [
+	"dnspython<2",
+	"six"
+]
+authors = [
+	{ name = "Greg Hellings", email = "greg.hellings@gmail.com" }
+]
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://github.com/greg-hellings/dnszone"
+repository = "https://github.com/greg-hellings/dnszone"
+
 [tool.setuptools_scm]
 write_to = "dnszone/version.py"
 
