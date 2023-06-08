@@ -81,8 +81,6 @@ jobs:
   publish:
     needs:
       - coverage
-      - lint
-      - packaging
     if: github.event_name == 'release'  # Only release during tags
     runs-on: ubuntu-20.04
 
