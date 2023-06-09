@@ -26,7 +26,7 @@ jobs:
         id: generate_matrix
         uses: coactions/dynamic-matrix@v1
         with:
-          min_version: "3.7"
+          min_python: "3.8"
           other_names: |
             lint
             packaging
