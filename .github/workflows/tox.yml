@@ -16,56 +16,40 @@ on:
     - cron: 1 0 * * *  # Run daily at 0:01 UTC
 
 jobs:
-  lint:
-    runs-on: ubuntu-20.04
+  pre:
+    name: Generate matrix
+    runs-on: ubuntu-22.04
+    outputs:
+      matrix: ${{ steps.generate_matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - name: Generate matrix
+        id: generate_matrix
+        uses: coactions/dynamic-matrix@v1
         with:
-          python-version: "3.x"
-      - name: run lint
-        run: |
-          python3 -m pip install -U tox
-          python3 -m tox -e lint
-
-  packaging:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3.0.0
-        with:
-          python-version: "3.x"
-      - name: run packaging
-        run: |
-          python3 -m pip install -U tox
-          python3 -m tox -e packaging
+          min_version: "3.7"
+          other_names: |
+            lint
+            packaging
 
   test:
     name: ${{ matrix.name }}
-    runs-on: ubuntu-20.04
+    runs-on: ${{ matrix.os || 'ubuntu-22.04' }}
+    needs: pre
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - name: py36
-            python-version: "3.6"
-          - name: py37
-            python-version: "3.7"
-          - name: py38
-            python-version: "3.8"
-          - name: py39
-            python-version: "3.9"
-          - name: py310
-            python-version: "3.10"
+      matrix: ${{ fromJson(needs.pre.outputs.matrix) }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up python ${{ matrix.python_version }}
+        uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: run test
+          python-version: ${{ matrix.python_version }}
+      - name: Install tox
         run: |
-          python3 -m pip install tox
-          python3 -m tox -e ${{ matrix.name }}
+          python3 -m pip install -U tox
+      - name: Run test
+        run: tox -e ${{ matrix.passed_name }}
         env:
           COVERAGE_FILE: .coverage.${{ matrix.python-version }}
       - name: upload artifacts
@@ -76,7 +60,7 @@ jobs:
 
   coverage:
     needs: test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
@@ -98,10 +82,8 @@ jobs:
   publish:
     needs:
       - coverage
-      - lint
-      - packaging
     if: github.event_name == 'release'  # Only release during tags
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     env:
       PY_COLORS: 1
