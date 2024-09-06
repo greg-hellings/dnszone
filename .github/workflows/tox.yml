@@ -50,38 +50,10 @@ jobs:
           python3 -m pip install -U tox
       - name: Run test
         run: tox -e ${{ matrix.passed_name }}
-        env:
-          COVERAGE_FILE: .coverage.${{ matrix.python-version }}
-      - name: upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-results
-          path: .coverage.${{ matrix.python-version }}
-
-  coverage:
-    needs: test
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-        with:
-          python-version: "3.x"
-      - uses: actions/download-artifact@v4.1.7
-        with:
-          name: coverage-results
-          path: .
-      - name: run coverage
-        run: |
-          python3 -m pip install tox codecov
-          python3 -m tox -e coverage
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
-        with:
-          fail_ci_if_error: true
 
   publish:
     needs:
-      - coverage
+      - test
     if: github.event_name == 'release'  # Only release during tags
     runs-on: ubuntu-22.04
 
